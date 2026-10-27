@@ -1,0 +1,390 @@
+# RAGLab Project Setup and Collaboration Instructions
+
+## 1. Project Overview
+
+We are two developers collaborating on a project named **RAGLab**, a RAG (Retrieval-Augmented Generation) evaluation, benchmarking, and diagnostic platform.
+
+This is our first project working together. We have similar experience levels, and both of us want to learn all parts of the project rather than permanently dividing the work into frontend and backend roles.
+
+We work asynchronously in our free time, usually a few sessions per week. Therefore, the project must have a clear structure, understandable documentation, small milestones, and reliable handoffs.
+
+**Important:** RAGLab is primarily a RAG evaluation and benchmarking platform, not simply a chatbot.
+
+## 2. Current Development Environment
+
+The primary developer has already completed the following setup on Windows.
+
+### Operating system and hardware
+- Operating system: Windows
+- RAM: 8 GB
+- Terminal: Windows PowerShell
+- Project directory: `C:\projects\raglab`
+
+### Installed software and verified versions
+
+| Software | Version / Status |
+|---|---|
+| Python 3.12 | Python 3.12.10, selected for the project |
+| Python 3.14 | Python 3.14.8, also installed |
+| Python 3.15 | Installed |
+| Python launcher | Available through the `py` command |
+| pip | 26.2.2 inside the project's virtual environment |
+| PostgreSQL | 18.6 |
+| pgvector | Extension files available; version 0.8.2 reported by PostgreSQL |
+| Git | 2.56.0.windows.2 |
+| GitHub repository | To be created or connected |
+
+Python 3.12 was selected as the project's baseline to provide a conservative, broadly compatible environment for Django and future RAG libraries.
+
+Do not change the selected Python version without a clear technical reason.
+
+### Virtual environment
+
+The primary developer has already created a virtual environment at:
+
+`C:\projects\raglab\.venv`
+
+It was created using Python 3.12.10.
+
+The following commands were verified successfully:
+
+```powershell
+.\.venv\Scripts\python.exe --version
+```
+
+Expected result:
+
+```text
+Python 3.12.10
+```
+
+The virtual environment's pip was upgraded to version 26.2.2.
+
+PowerShell activation currently fails because the machine's execution policy blocks activation scripts. We have deliberately not changed the execution policy.
+
+**Use the virtual environment's Python executable directly:**
+
+```powershell
+.\.venv\Scripts\python.exe
+```
+
+For example:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip --version
+```
+
+Do not require changing PowerShell's execution policy. If activation is convenient, an alternative is to use Command Prompt and activate the environment there, but direct interpreter execution is our default.
+
+### PostgreSQL verification
+
+PostgreSQL is installed and responding.
+
+Verified commands include:
+
+```powershell
+psql --version
+```
+
+And:
+
+```powershell
+psql -U postgres -d postgres -c "SELECT version();"
+```
+
+The database connection works with the configured PostgreSQL credentials.
+
+The `vector` extension is available, with default version 0.8.2, but it has not yet been enabled in the application database.
+
+**Do not enable pgvector yet.** We will introduce vector storage when the project reaches the RAG implementation phase.
+
+### Current project state
+
+At the last verified checkpoint:
+- The `C:\projects\raglab` directory exists.
+- The `.venv` directory exists.
+- Python 3.12.10 is available inside `.venv`.
+- Git and PostgreSQL are installed and working.
+- Django has not been installed yet.
+- React has not been initialized yet.
+- No Django `manage.py` file exists yet.
+- No application dependencies have been installed.
+- No application code has been created.
+
+Do not assume that Django, Django REST Framework, psycopg, Node.js, npm, or other dependencies are installed. Check before relying on them.
+
+The teammate must verify her own environment independently. Do not assume that software installed on the primary developer's machine is also installed on hers.
+
+## 3. Reproducible Environment for Both Developers
+
+We need both developers to use compatible Python versions and dependency versions without sharing the actual virtual environment.
+
+**Important:** Never commit or share the `.venv` directory through GitHub. Virtual environments contain machine-specific paths and files and should be recreated locally on each computer.
+
+Instead, establish the following:
+
+1. Python 3.12 as the project baseline.
+2. A `.gitignore` file that excludes `.venv/`, Python cache files, environment secrets, and generated artifacts.
+3. A `requirements.txt` file containing the project's explicitly selected and tested Python dependency versions.
+4. A `.python-version` file containing `3.12` for tools that support it.
+5. A `README.md` containing setup instructions for Windows and, where practical, other operating systems.
+6. An `.env.example` file documenting required environment variable names without real credentials.
+7. A safe approach to sharing database configuration without committing passwords or secrets.
+
+Do not create a fake or speculative `requirements.txt`. Generate or update it after installing and testing the actual dependencies.
+
+For the teammate's eventual setup, the expected Windows commands are:
+
+```powershell
+# Clone the repository
+git clone <repository-url>
+cd RAGLab
+
+# Create a local virtual environment with Python 3.12
+py -3.12 -m venv .venv
+
+# Verify Python
+.\.venv\Scripts\python.exe --version
+
+# Upgrade pip if needed
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+
+# Install the project's pinned dependencies
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+These installation commands should only be used after the corresponding files have been created and committed.
+
+If `py -3.12` fails on the teammate's machine, first check installed Python versions using:
+
+```powershell
+py -0p
+```
+
+Then guide her through installing Python 3.12 from the official Python distribution if necessary. Do not make her install every Python version or change her system-wide default unnecessarily.
+
+Also verify Node.js and npm when initializing React. Record their actual versions and document any required version rather than assuming they are installed.
+
+## 4. Technology Stack
+
+Use the following stack unless a documented technical reason justifies a change.
+
+### Backend
+- Python 3.12
+- Django
+- Django REST Framework
+- PostgreSQL
+- psycopg for PostgreSQL connectivity
+- pytest and appropriate Django testing tools
+
+### Frontend
+- React
+- JavaScript
+- Vite
+- npm
+
+### RAG and evaluation, introduced later
+- sentence-transformers for local embeddings
+- Appropriate document-processing and chunking utilities
+- PostgreSQL with pgvector for vector storage and similarity search
+- Retrieval evaluation metrics implemented and tested explicitly
+- Additional dependencies only when justified by a concrete milestone
+
+### Development and collaboration
+- Git and GitHub
+- Feature branches and pull requests
+- GitHub Issues and Projects for task tracking
+- Automated tests
+- GitHub Actions for CI when the application is ready
+
+Prefer CPU-friendly tools and local models. Do not require a paid LLM API.
+
+Do not introduce Celery, Redis, Docker, a second vector database, or other infrastructure without a specific need and an explanation of the trade-off.
+
+## 5. Development Must Be Incremental
+
+We do not want to install all RAG dependencies immediately or generate the entire application in one response.
+
+Build the project through small, testable milestones.
+
+### Phase 0: Repository and basic architecture
+- Create or connect the GitHub repository.
+- Establish `.gitignore`, README, environment documentation, and initial project structure.
+- Agree on branch and pull-request rules.
+- Establish backend and frontend conventions.
+- Define the initial API contract.
+- Verify that both developers can clone and understand the repository.
+
+### Phase 1: Basic full-stack application
+Build a conventional working application before adding AI functionality.
+
+- Initialize Django.
+- Initialize Django REST Framework.
+- Configure PostgreSQL.
+- Initialize React with Vite.
+- Connect React to a basic Django health-check endpoint.
+- Configure development environment variables safely.
+- Add initial tests.
+- Document commands to run both frontend and backend.
+
+**Acceptance criteria:**
+- Django starts successfully.
+- React starts successfully.
+- Django connects to PostgreSQL.
+- The frontend can call the backend health endpoint.
+- Secrets are not committed.
+- Both developers can independently clone and run the application.
+
+No embeddings, vector search, RAG pipeline, or benchmark implementation is required in this phase.
+
+### Phase 2: Basic application features
+- Design the initial data models.
+- Add database migrations.
+- Build REST API endpoints.
+- Implement basic dataset management.
+- Build corresponding frontend forms and listing pages.
+- Implement record creation, listing, and validation.
+- Add unit and integration tests.
+
+Define the data schema and API contracts before implementing dependent features.
+
+### Phase 3: Initial RAG evaluation
+Only after the basic application works reliably:
+
+- Introduce document-processing dependencies.
+- Implement document ingestion and chunking.
+- Add local embedding generation.
+- Integrate pgvector when needed.
+- Implement a minimal retrieval pipeline.
+- Create a small, explicit benchmark dataset with known relevant documents.
+- Implement and test Recall@K and Mean Reciprocal Rank (MRR).
+
+Clearly define metric formulas, edge cases, and behavior when no relevant documents exist. Never invent benchmark results.
+
+### Phase 4: Advanced evaluation and diagnostics
+Add features incrementally, such as:
+
+- Hybrid retrieval.
+- Reranking.
+- Additional ranking metrics, including Precision@K and nDCG@K.
+- Retrieval and answer-quality evaluation where appropriate.
+- Failure analysis and diagnostic explanations.
+- Comparative experiment runs.
+- Performance measurements.
+
+Every metric must have a documented definition and tests.
+
+### Phase 5: Dashboard, reporting, and regression testing
+- Build a frontend for comparing evaluation runs.
+- Display metrics and relevant diagnostic results.
+- Generate reports.
+- Introduce CI checks and benchmark regression detection.
+- Prepare the project for a public portfolio release.
+
+Do not implement future phases prematurely just because they sound interesting.
+
+## 6. Team Collaboration Rules
+
+We both want to understand the full application, so do not permanently divide the work into "backend developer" and "frontend developer."
+
+Use feature- and milestone-based ownership.
+
+For each milestone:
+- Assign one developer as the lead.
+- Assign the other as reviewer or paired contributor.
+- Rotate ownership across backend, frontend, database, RAG, and testing.
+- Ensure the reviewer understands the implementation.
+- Switch roles on subsequent tasks so both developers learn the entire stack.
+
+Before parallel work begins, agree on shared interfaces, API contracts, schemas, and acceptance criteria.
+
+### Git workflow
+
+- `main` must remain stable.
+- Use feature branches for changes.
+- Open pull requests for review.
+- Run relevant tests before merging.
+- Do not commit directly to `main` for normal feature work.
+- Do not force-push shared branches.
+- Keep commits focused and understandable.
+- Never commit passwords, API keys, database credentials, `.env` files containing secrets, virtual environments, or large model files.
+- Avoid overlapping changes to shared files without coordinating first.
+
+Use GitHub Issues to define tasks with:
+- Goal
+- Scope
+- Dependencies
+- Owner
+- Acceptance criteria
+- Validation steps
+
+Track work using statuses such as:
+`Todo`, `In Progress`, `In Review`, and `Done`.
+
+## 7. Asynchronous Handoffs
+
+Because we do not always work at the same time, every non-trivial task should end with a concise handoff.
+
+Use this template:
+
+**Task / Issue:**
+**Lead:**
+**Reviewer:**
+**Branch / Pull Request:**
+**Completed:**
+**Files changed:**
+**Tests and commands run:**
+**Validation results:**
+**Technical decisions:**
+**Interfaces or contracts changed:**
+**Remaining work:**
+**Suggested next step:**
+**Blockers:**
+**What the other developer should learn or review:**
+
+Do not claim tests passed unless they were actually executed. Distinguish between completed, partially completed, and untested work.
+
+## 8. Instructions for Your AI Agent
+
+Act as a technical mentor and implementation assistant for RAGLab.
+
+Follow these rules:
+
+1. Inspect the existing repository and files before proposing changes. Never assume the current state based only on this prompt.
+2. Treat the repository as the source of truth for code and the project's current state.
+3. Work in small milestones with explicit acceptance criteria.
+4. Explain technical concepts clearly because both developers are learning.
+5. Before changing shared interfaces, explain the impact on the other developer's work.
+6. Do not dump the entire application or generate large amounts of unrelated code.
+7. Avoid unnecessary dependencies and premature architecture.
+8. Do not introduce RAG or AI libraries until the relevant phase.
+9. Do not invent installed software, test results, benchmark results, or completed work.
+10. Use Windows PowerShell-compatible commands by default.
+11. Remember that PowerShell activation scripts may be blocked. Use `.\.venv\Scripts\python.exe` when appropriate.
+12. Use Python 3.12 for project commands.
+13. Keep setup steps reproducible for both developers.
+14. Update documentation when setup commands, dependencies, schemas, or API contracts change.
+15. Include exact commands to run and explain what successful output should look like.
+16. Ask before making major architectural changes.
+17. Prefer simple, maintainable solutions over unnecessary abstractions.
+18. Ensure both developers have opportunities to implement and review different parts of the stack.
+19. If repository state is unknown, inspect it first and report what is already present before taking action.
+20. If a task depends on a tool, account, or file that is unavailable to the agent, state the limitation instead of pretending to have completed the task.
+
+## 9. What to Do First
+
+Do not start writing the complete application.
+
+First:
+
+1. Inspect the repository, if access is available.
+2. Determine whether the GitHub repository exists and whether any files have already been committed.
+3. Verify the local Python and environment setup relevant to your own machine.
+4. Summarize what exists and what is missing.
+5. Identify the next smallest milestone.
+6. Propose the initial repository structure and Git workflow.
+7. Wait for agreement before making major changes.
+
+The first shared goal is a reproducible, working Django + React + PostgreSQL application. RAG functionality comes afterward.
+
+**Definition of success:** both developers can independently set up, run, test, understand, and contribute to RAGLab without depending on the other developer's local virtual environment or undocumented machine-specific configuration.

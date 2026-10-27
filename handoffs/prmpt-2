@@ -1,0 +1,189 @@
+# RAGLab: Latest Development Progress and Handoff
+
+## 1. GitHub Repository
+
+Repository URL: https://github.com/Nishchaymodi8/RAGLab
+
+Local project directory on the primary developer's machine:
+
+`C:\projects\raglab`
+
+Git has been initialized locally, the `main` branch has been created, and the repository has been connected to GitHub.
+
+Initial project files include:
+- `.gitignore`
+- `README.md`
+- `.python-version`
+- `docs/PROJECT_STRUCTURE.md`
+- `backend/`
+- `frontend/`
+- `.venv/` (local only; excluded from Git)
+
+The project structure includes `backend/`, `frontend/`, and `docs/`.
+
+The primary developer has previously committed and pushed the initial repository setup and backend work. However, the commit/push status of the latest PostgreSQL configuration changes must be verified by inspecting the current repository and Git status. Do not assume that every latest local change is already on GitHub.
+
+## 2. Verified Python Environment
+
+The primary developer uses Windows and has selected Python 3.12 for RAGLab.
+
+Verified environment:
+- Python: 3.12.10
+- Virtual environment: `C:\projects\raglab\.venv`
+- pip: 26.2.2
+- Django: 6.1.2
+- Django REST Framework: 3.18.3
+- Psycopg: 3.3.6
+- python-dotenv: 1.2.4
+
+The dependency versions above were observed in the primary developer's environment. The current `requirements.txt` was generated from the installed Python environment using `pip freeze`.
+
+Do not install these packages again without checking the existing environment first.
+
+### Running Python commands
+
+PowerShell activation has caused confusion and has not been necessary for running the project.
+
+Use the explicit virtual-environment interpreter when needed:
+
+From the project root:
+
+```powershell
+.\.venv\Scripts\python.exe --version
+```
+
+From `C:\projects\raglab\backend`:
+
+```powershell
+..\.venv\Scripts\python.exe manage.py check
+```
+
+Do not accidentally use a globally installed Python version. Earlier, the `python` command invoked Python 3.14 instead of the project's Python 3.12 environment.
+
+The teammate must create her own virtual environment. Never share or commit the primary developer's `.venv` directory.
+
+## 3. Django Backend Progress
+
+A Django project has been created inside `backend/`.
+
+The project configuration is located at:
+
+`backend/config/settings.py`
+
+The Django management file is:
+
+`backend/manage.py`
+
+The installed backend dependencies are Django, Django REST Framework, Psycopg, and python-dotenv.
+
+The `requirements.txt` file exists at the repository root and includes the installed package versions.
+
+Django's database settings have been configured to use PostgreSQL, with database credentials loaded from a root-level `.env` file using python-dotenv.
+
+The `.env` file is local configuration and must never be committed. `.env.example` is intended to document the required environment variable names for other developers without exposing actual credentials.
+
+The primary developer successfully ran Django migrations. The following standard migration groups completed successfully:
+
+- `contenttypes`
+- `auth`
+- `admin`
+- `sessions`
+
+The successful migration output confirms that Django was able to connect to the configured database and apply its standard migrations.
+
+Do not repeat initial Django setup or database migrations unnecessarily. First inspect the repository, settings, migration state, and current database configuration.
+
+## 4. PostgreSQL Progress
+
+PostgreSQL 18.6 is installed on the primary developer's Windows machine.
+
+The application database is named:
+
+`raglab`
+
+The configured application database user is:
+
+`raglab_user`
+
+Django has successfully applied its initial migrations to the configured database.
+
+The root `.env` file is expected to contain:
+
+```text
+DB_NAME=raglab
+DB_USER=raglab_user
+DB_PASSWORD=<local database password>
+DB_HOST=localhost
+DB_PORT=5432
+```
+
+The actual password must remain local. Never include it in prompts, source code, Git commits, screenshots, or shared documentation.
+
+The primary developer initially used a weak password value during local setup. If it is still the actual PostgreSQL password, replace it with a strong, unique password and update the local `.env` file accordingly.
+
+The pgvector extension files are available in PostgreSQL, but pgvector has not yet been enabled for the RAGLab database. Do not enable it until the RAG implementation phase.
+
+## 5. Frontend Progress
+
+The `frontend/` directory exists, but React and Vite have not yet been initialized according to the latest confirmed progress.
+
+Node.js and npm installation status and versions have not yet been verified.
+
+The next frontend task is to:
+1. Check whether Node.js and npm are installed.
+2. Record their actual versions.
+3. Initialize React with Vite inside the existing `frontend/` directory.
+4. Install the required frontend dependencies.
+5. Start the frontend and verify that it runs.
+
+Do not initialize a second project inside an unnecessary nested `frontend/frontend` directory.
+
+## 6. API and Application Feature Status
+
+The initial Django project and database setup are in place.
+
+However, the following work has not yet been confirmed complete:
+- A dedicated Django API app.
+- A `/api/health/` endpoint.
+- A React-to-Django API connection.
+- Custom RAGLab data models.
+- Dataset-management APIs and frontend forms.
+- RAG retrieval, embeddings, vector search, and evaluation metrics.
+
+Inspect the current repository before deciding whether to implement these tasks. Do not assume they exist merely because they were discussed in the plan.
+
+## 7. Immediate Next Milestone
+
+Continue from the current state rather than restarting.
+
+Recommended sequence:
+
+1. Inspect the GitHub repository and local working tree.
+2. Check whether the latest backend and PostgreSQL configuration changes have been committed and pushed.
+3. Verify that `.env` is excluded from Git and that no credentials have been committed.
+4. Verify Django configuration and PostgreSQL connectivity without recreating existing resources unnecessarily.
+5. Initialize React with Vite inside `frontend/`.
+6. Create and test a simple Django health-check API if one does not already exist.
+7. Connect the React frontend to that API.
+8. Document setup instructions so both developers can independently run the application.
+
+Do not start implementing embeddings, vector retrieval, or benchmark metrics yet.
+
+## 8. Team Collaboration Requirements
+
+This project is developed by two people who want to learn the entire stack. Avoid permanently dividing the project into frontend-only and backend-only ownership.
+
+Use small tasks, feature branches, pull requests, code reviews, and clear acceptance criteria.
+
+Rotate lead and reviewer roles across frontend, backend, database, testing, and later RAG implementation.
+
+For every task:
+- Inspect the current code before changing it.
+- Explain the purpose of the change.
+- Provide exact commands to test it.
+- Report actual test results honestly.
+- Document interfaces and configuration changes.
+- Avoid committing secrets or machine-specific files.
+- Provide a handoff describing completed work, files changed, validation, remaining work, blockers, and the next step.
+
+**First action for the agent:** inspect the current repository and report the actual state of the files, Git history, dependencies, and application configuration. Then propose the smallest next step. Do not recreate the repository, virtual environment, Django project, database, or migrations unless inspection demonstrates that it is necessary.
