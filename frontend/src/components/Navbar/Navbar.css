@@ -1,0 +1,177 @@
+.navbar {
+  width: 100%;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 36px;
+
+  background: #1f1f1f;
+  border-bottom: 1px solid #303030;
+
+  position: relative;
+}
+
+/* =========================
+   BRAND
+========================= */
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.navbar-logo {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffd000;
+  color: #111111;
+
+  border-radius: 14px;
+
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.navbar-brand span {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* =========================
+   CENTER NAVIGATION
+========================= */
+
+.navbar-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+
+  width: 320px;
+  height: 50px;
+
+  padding: 4px;
+
+  background: #242424;
+  border: 1px solid #ffd000;
+  border-radius: 16px;
+}
+
+.navbar-link {
+  flex: 1;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #a8a8a8;
+
+  text-decoration: none;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  border-radius: 12px;
+
+  transition: 0.2s ease;
+}
+
+.navbar-link:hover {
+  color: #ffffff;
+}
+
+.navbar-link.active {
+  background: #ffd000;
+  color: #111111;
+  font-weight: 700;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.navbar-settings {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffd000;
+
+  border: 1px solid #ffd000;
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  transition: 0.2s ease;
+}
+
+.navbar-settings:hover {
+  background: #2b2b2b;
+}
+
+.navbar-settings svg {
+  animation: rotateSettings 5s linear infinite;
+}
+
+@keyframes rotateSettings {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 12px 24px;
+  }
+
+  .navbar-nav {
+    width: 420px;
+  }
+
+  .navbar-brand span {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 650px) {
+  .navbar {
+    height: auto;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .navbar-nav {
+    position: static;
+    transform: none;
+
+    order: 3;
+
+    width: 100%;
+  }
+}
