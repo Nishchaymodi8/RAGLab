@@ -4,17 +4,15 @@
 
 .auth-container {
   --ink: #111111;
-  --yellow: #ffde59;
-  --violet: #a78bfa;
-  --green: #4ade80;
+  --yellow: #ffd000;
+  --violet: #ffd000;
+  --green: #ffd000;
   --white: #ffffff;
   --gray: #444444;
 
   position: relative;
 
   width: 100%;
-  min-height: 100vh;
-
   overflow: hidden;
 
   background: #1f1f1f;
@@ -61,7 +59,7 @@
   width: 100%;
   max-width: 400px;
 
-  padding: 24px;
+  padding: px;
 }
 
 
@@ -72,7 +70,7 @@
 .auth-form {
   width: 100%;
 
-  padding: 38px 34px;
+  padding: 15px 24px;
 
   background: var(--white);
 
@@ -539,6 +537,19 @@
   outline-offset: 3px;
 }
 
+.auth-success {
+  margin: 14px 0 0;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.auth-error {
+  margin: 14px 0 0;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 700;
+}
 
 /* =========================================
    MOBILE
