@@ -4,6 +4,9 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from rag.models import Document, DocumentVersion
+
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -52,3 +55,92 @@ class LoginSerializer(TokenObtainPairSerializer):
         }
 
         return data
+
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+    version = serializers.SerializerMethodField()
+    chunks = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Document
+        fields = [
+            "id",
+            "source_name",
+            "source_type",
+            "source_uri",
+            "status",
+            "version",
+            "chunks",
+            "created_at",
+        ]
+
+        read_only_fields = [
+            "id",
+            "status",
+            "version",
+            "chunks",
+            "created_at",
+        ]
+
+    def get_status(self, obj):
+        latest_version = obj.versions.order_by("-created_at").first()
+
+        if not latest_version:
+            return "pending"
+
+        return latest_version.processing_status
+
+    def get_version(self, obj):
+        return obj.versions.count()
+
+    def get_chunks(self, obj):
+        latest_version = obj.versions.order_by("-created_at").first()
+
+        if not latest_version:
+            return 0
+
+        return latest_version.chunks.count()
+    status = serializers.SerializerMethodField()
+    version = serializers.SerializerMethodField()
+    chunks = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Document
+        fields = [
+            "id",
+            "source_name",
+            "source_type",
+            "source_uri",
+            "status",
+            "version",
+            "chunks",
+            "created_at",
+        ]
+        read_only_fields = [
+            "id",
+            "status",
+            "version",
+            "chunks",
+            "created_at",
+        ]
+
+    def get_status(self, obj):
+        latest_version = obj.versions.order_by("-created_at").first()
+
+        if not latest_version:
+            return "pending"
+
+        return latest_version.processing_status
+
+    def get_version(self, obj):
+        return obj.versions.count()
+
+    def get_chunks(self, obj):
+        latest_version = obj.versions.order_by("-created_at").first()
+
+        if not latest_version:
+            return 0
+
+        return latest_version.chunks.count()

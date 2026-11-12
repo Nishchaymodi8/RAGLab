@@ -11,7 +11,7 @@ function Navbar() {
       </Link>
 
       <nav className="navbar-nav">
-        <Link to="/" className="navbar-link active">
+        <Link to="/chat" className="navbar-link active">
           Chat
         </Link>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Auth.css";
 import { useNavigate } from "react-router-dom";
+import GoogleLogin from "./GoogleLogin/GoogleLogin";
 function Auth() {
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -269,7 +270,7 @@ function Auth() {
                 Let me in
                 <span aria-hidden="true">→</span>
               </button>
-
+              <GoogleLogin />
               <div className="auth-links">
                 <a href="#">Lost password</a>
 
