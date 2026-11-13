@@ -155,3 +155,6 @@ import os
 load_dotenv()
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

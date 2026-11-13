@@ -84,7 +84,9 @@ class Chunk(models.Model):
     start_offset = models.PositiveIntegerField(null=True, blank=True)
     end_offset = models.PositiveIntegerField(null=True, blank=True)
     chunking_config = models.JSONField(default=dict)
+    embedding = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
 
     class Meta:
         constraints = [
