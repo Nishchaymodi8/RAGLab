@@ -1,4 +1,5 @@
 import { useState } from "react";
+import HealthStatus from "../../../components/HealthStatus/HealthStatus";
 import "./Auth.css";
 
 function Auth() {
@@ -10,6 +11,10 @@ function Auth() {
 
   return (
     <div className={`auth-container ${isSignUp ? "sign-up" : "sign-in"}`}>
+      <div style={{ position: "absolute", top: 16, right: 16, zIndex: 100 }}>
+        <HealthStatus compact />
+      </div>
+
 
       {/* =========================
           FORM SECTION

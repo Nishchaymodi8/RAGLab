@@ -1,5 +1,6 @@
 import { Settings } from "lucide-react";
 import { Link } from "react-router-dom";
+import HealthStatus from "../HealthStatus/HealthStatus";
 import "./Navbar.css";
 
 function Navbar() {
@@ -11,7 +12,7 @@ function Navbar() {
       </Link>
 
       <nav className="navbar-nav">
-        <Link to="/" className="navbar-link active">
+        <Link to="/chat" className="navbar-link active">
           Chat
         </Link>
 
@@ -22,11 +23,18 @@ function Navbar() {
         <Link to="/lab" className="navbar-link">
           Lab
         </Link>
+
+        <Link to="/health" className="navbar-link">
+          Health
+        </Link>
       </nav>
 
-      <Link to="/settings" className="navbar-settings">
-        <Settings size={22} />
-      </Link>
+      <div className="navbar-actions">
+        <HealthStatus compact />
+        <Link to="/settings" className="navbar-settings" title="Settings">
+          <Settings size={22} />
+        </Link>
+      </div>
     </header>
   );
 }

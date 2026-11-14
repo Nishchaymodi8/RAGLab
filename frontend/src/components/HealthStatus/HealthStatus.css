@@ -1,0 +1,182 @@
+/* ===================================================
+   HealthStatus Component Styles
+=================================================== */
+
+/* Compact Pill (used in Navbar / headers) */
+.health-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+.health-pill--ok {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.health-pill--ok:hover {
+  background-color: rgba(34, 197, 94, 0.2);
+}
+
+.health-pill--error {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.health-pill--error:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.health-pill--loading {
+  background-color: rgba(234, 179, 8, 0.12);
+  color: #ca8a04;
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+/* Status Indicator Dot */
+.health-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.health-pill--ok .health-dot,
+.health-badge--ok .health-dot {
+  background-color: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+}
+
+.health-pill--error .health-dot,
+.health-badge--error .health-dot {
+  background-color: #ef4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.health-pill--loading .health-dot,
+.health-badge--loading .health-dot {
+  background-color: #eab308;
+  animation: pulse-dot 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.health-refresh {
+  opacity: 0.7;
+}
+
+.health-refresh.spin,
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Full Badge (used on Health / Auth pages) */
+.health-badge {
+  padding: 14px 18px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: inherit;
+  color: #1f2937;
+}
+
+.health-badge--ok {
+  border-left: 4px solid #22c55e;
+}
+
+.health-badge--error {
+  border-left: 4px solid #ef4444;
+}
+
+.health-badge--loading {
+  border-left: 4px solid #eab308;
+}
+
+.health-badge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.health-badge-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.health-refresh-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.health-refresh-btn:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.health-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  align-items: center;
+}
+
+.health-service code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.health-latency {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.health-error-text {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.health-error-hint {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.health-message {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}

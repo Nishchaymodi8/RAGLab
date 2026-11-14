@@ -1,0 +1,233 @@
+.health-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 24px;
+}
+
+.health-card {
+  width: 100%;
+  max-width: 680px;
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.health-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.health-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #58a6ff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.health-back-link:hover {
+  text-decoration: underline;
+}
+
+.health-card-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.health-card-refresh:hover:not(:disabled) {
+  background-color: #30363d;
+}
+
+.health-title-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.health-title-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(88, 166, 255, 0.15);
+  color: #58a6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.health-title-section h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: #f0f6fc;
+}
+
+.health-subtitle {
+  font-size: 13px;
+  color: #8b949e;
+  margin: 4px 0 0 0;
+}
+
+.health-status-banner {
+  margin-bottom: 24px;
+}
+
+.health-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.health-banner.loading {
+  background-color: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #e3b341;
+}
+
+.health-banner.success {
+  background-color: rgba(46, 160, 67, 0.12);
+  border: 1px solid rgba(46, 160, 67, 0.4);
+  color: #3fb950;
+}
+
+.health-banner.success strong {
+  display: block;
+  font-size: 15px;
+  color: #3fb950;
+}
+
+.health-banner.success p,
+.health-banner.error p {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: #8b949e;
+}
+
+.health-banner.error {
+  background-color: rgba(248, 81, 73, 0.12);
+  border: 1px solid rgba(248, 81, 73, 0.4);
+  color: #f85149;
+}
+
+.health-banner.error strong {
+  display: block;
+  font-size: 15px;
+  color: #f85149;
+}
+
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.health-stat {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.health-stat-label {
+  font-size: 12px;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.health-stat-value {
+  font-size: 15px;
+  color: #f0f6fc;
+}
+
+.health-stat-value code {
+  color: #58a6ff;
+  font-size: 14px;
+}
+
+.health-raw-section {
+  margin-bottom: 28px;
+}
+
+.health-raw-section h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8b949e;
+  margin-bottom: 8px;
+}
+
+.health-raw-json {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  color: #7ee787;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.health-footer-links {
+  display: flex;
+  gap: 12px;
+}
+
+.health-btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.health-btn.primary {
+  background-color: #238636;
+  color: #ffffff;
+}
+
+.health-btn.primary:hover {
+  background-color: #2ea043;
+}
+
+.health-btn.secondary {
+  background-color: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+}
+
+.health-btn.secondary:hover {
+  background-color: #30363d;
+}

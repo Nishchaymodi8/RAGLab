@@ -102,8 +102,14 @@
 }
 
 /* =========================
-   SETTINGS
+   ACTIONS & SETTINGS
 ========================= */
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 
 .navbar-settings {
   width: 46px;
