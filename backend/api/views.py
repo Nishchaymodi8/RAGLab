@@ -5,19 +5,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import RegisterSerializer, LoginSerializer, DocumentSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 import os
 from django.contrib.auth.models import User
 from django.db import IntegrityError,transaction
 from google.auth.transport import requests
 from google.oauth2 import id_token
-from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 import hashlib
 from rest_framework.parsers import MultiPartParser, FormParser
 from rag.models import Document, DocumentVersion
 from .services.document_processor import process_document_version
-
+from api.services.retrieval_service import retrieve_chunks
 
 
 
@@ -302,3 +301,57 @@ class DocumentListCreateView(APIView):
             serializer.data,
             status=status.HTTP_201_CREATED,
         )
+
+class RetrievalView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        query = request.data.get("query")
+        top_k = request.data.get("top_k", 5)
+
+        if not query or not query.strip():
+            return Response(
+                {"detail": "Query is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            top_k = int(top_k)
+
+            if top_k < 1 or top_k > 50:
+                return Response(
+                    {"detail": "top_k must be between 1 and 50."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        except (TypeError, ValueError):
+            return Response(
+                {"detail": "top_k must be a valid integer."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        results = retrieve_chunks(
+            query=query,
+            top_k=top_k,
+        )
+
+        response_results = []
+
+        for index, result in enumerate(results, start=1):
+            chunk = result["chunk"]
+
+            response_results.append({
+                "rank": index,
+                "score": round(result["score"], 4),
+                "document": chunk.document_version.document.source_name,
+                "document_id": chunk.document_version.document.id,
+                "chunk_id": chunk.id,
+                "chunk_index": chunk.chunk_index,
+                "text": chunk.text,
+            })
+
+        return Response({
+            "query": query,
+            "top_k": top_k,
+            "results": response_results,
+        })

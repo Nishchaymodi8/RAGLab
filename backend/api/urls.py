@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import health_check
 from .views import *
+from api.views import RetrievalView
 
 
 urlpatterns = [
@@ -14,4 +15,9 @@ urlpatterns = [
         DocumentListCreateView.as_view(),
         name="documents",
     ),
+    path(
+    "retrieval/",
+    RetrievalView.as_view(),
+    name="retrieval",
+),
 ]

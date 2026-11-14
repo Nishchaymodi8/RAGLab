@@ -10,6 +10,8 @@ import {
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import "./Settings.css";
+import { logout } from "../../utils/auth";
+
 
 function Settings() {
   const [retrievalStrategy, setRetrievalStrategy] =
@@ -20,6 +22,10 @@ function Settings() {
   const [chunkSize, setChunkSize] = useState(500);
 
   const [chunkOverlap, setChunkOverlap] = useState(50);
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <div className="settings-page">
@@ -38,6 +44,9 @@ function Settings() {
               Configure your RAGLab workspace and default RAG behavior.
             </p>
           </div>
+          <button onClick={handleLogout}>
+            Logout
+          </button>
         </section>
 
         <div className="settings-sections">

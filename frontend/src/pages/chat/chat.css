@@ -1,26 +1,87 @@
 .chat-page {
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
+  background: #1f1f1f;
+  color: #f5f5f5;
 
   display: flex;
   flex-direction: column;
 
-  background: #1f1f1f;
-  color: #f5f5f5;
+  overflow: hidden;
 }
 
 .chat-layout {
-  padding: 20px;
+  flex: 1;
+  min-height: 0;
 
+  padding: 30px;
   display: flex;
-  align-items: flex-start;
-
+  align-items: stretch;
   gap: 40px;
 
-  flex: 1;
+  overflow: hidden;
 }
 
 .chat-content {
   flex: 1;
   min-width: 0;
-  padding-top: 10px;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  overflow: hidden;
+}
+
+/* Initial landing content */
+.chat-content > .chat-greeting {
+  flex: 0 0 auto;
+}
+
+.chat-content > .suggestions {
+  flex: 0 0 auto;
+}
+
+/* Chat input */
+.chat-content > .chat-input-area {
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* After search */
+.chat-content > .chat-input-area.has-results {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Retrieval results scroll independently */
+.chat-input-area.has-results .retrieval-results {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+
+  padding-right: 8px;
+  padding-bottom: 20px;
+}
+
+.retrieval-results::-webkit-scrollbar {
+  width: 7px;
+}
+
+.retrieval-results::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.retrieval-results::-webkit-scrollbar-thumb {
+  background: #505050;
+  border-radius: 10px;
+}
+
+.retrieval-results::-webkit-scrollbar-thumb:hover {
+  background: #666666;
 }

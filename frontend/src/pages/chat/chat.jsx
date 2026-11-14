@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "./Chat.css";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -8,15 +8,8 @@ import ChatInput from "../../components/Chat/ChatInput/ChatInput";
 import Suggestions from "../../components/Chat/Suggestions/Suggestions";
 import Footer from "../../components/Footer/Footer";
 
-import { logout } from "../../utils/auth";
-
 function Chat() {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+  const [hasSearched, setHasSearched] = useState(false);
 
   return (
     <div className="chat-page">
@@ -26,13 +19,14 @@ function Chat() {
         <Sidebar />
 
         <section className="chat-content">
-          <Greeting />
-          <Suggestions />
-          <ChatInput />
+          {!hasSearched ? (
+            <>
+              <Greeting />
+              <Suggestions />
+            </>
+          ) : null}
 
-          <button onClick={handleLogout}>
-            Logout
-          </button>
+          <ChatInput onSearch={() => setHasSearched(true)} />
         </section>
       </main>
 

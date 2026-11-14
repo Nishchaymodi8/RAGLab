@@ -1,23 +1,31 @@
 .chat-input-wrapper {
-  width: 95%;
+  width: 100%;
   max-width: 1100px;
-
-  height: 52px;
-
-  margin-top: 10px;
-
+  min-height: 72px;
+  margin-top: 24px;
   padding: 10px 12px 10px 22px;
-
   display: flex;
   align-items: center;
   gap: 12px;
-
   background: #252525;
-
   border: 1px solid #3a3a3a;
   border-radius: 22px;
+
+  /* Keep input at bottom */
+  order: 2;
+  flex-shrink: 0;
+}
+.retrieval-results {
+  order: 1;
 }
 
+.retrieval-status {
+  order: 1;
+}
+
+.retrieval-error {
+  order: 1;
+}
 /* Input */
 
 .chat-input-wrapper textarea {
@@ -79,6 +87,91 @@
   transform: scale(0.94);
 }
 
+.chat-input-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-input-area .chat-input-wrapper {
+  max-width: none;
+}
+
+.chat-send-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.retrieval-status {
+  margin-top: 12px;
+  color: #858585;
+  font-size: 14px;
+}
+
+.retrieval-error {
+  margin-top: 12px;
+  padding: 12px 16px;
+  color: #ff8f8f;
+  background: #2a2020;
+  border: 1px solid #4a3030;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.retrieval-results {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.retrieval-results-header {
+  display: flex;
+  justify-content: space-between;
+  color: #858585;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.retrieval-results {
+  flex: 1;
+  min-height: 0;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 8px;
+  padding-bottom: 20px;
+}
+
+.retrieval-result-top {
+  display: flex;
+  justify-content: space-between;
+  color: #ffd000;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.retrieval-result-document {
+  margin-top: 8px;
+  color: #b7b7b7;
+  font-size: 13px;
+}
+
+.retrieval-result p {
+  margin: 10px 0 0;
+  color: #d0d0d0;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+
+
+
 /* Smaller screens */
 
 @media (max-width: 700px) {
@@ -99,3 +192,4 @@
     font-size: 16px;
   }
 }
+
