@@ -1,0 +1,16 @@
+# 17. Local LLM - Ollama
+
+RAGLab uses a local LLM for answer generation.
+
+## Required Software
+
+Install Ollama on the development machine.
+
+Ollama official website:
+
+https://ollama.com/
+
+After installation, verify:
+
+```powershell
+ollama --version
