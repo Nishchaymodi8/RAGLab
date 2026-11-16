@@ -23,7 +23,7 @@
 .chat-greeting h1 {
   margin: 0;
 
-  color: #f5f5f5;
+  color: #ffd000;
 
   font-size: clamp(38px, 4vw, 76px);
   line-height: 0.98;

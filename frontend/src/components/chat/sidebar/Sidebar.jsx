@@ -22,7 +22,7 @@ function Sidebar() {
         <Search size={19} />
         <input
           type="text"
-          placeholder="Search chats"
+          placeholder="Search chat"
         />
       </div>
 

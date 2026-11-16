@@ -6,7 +6,7 @@ function Navbar() {
   return (
     <header className="navbar">
       <Link to="/" className="navbar-brand">
-        <div className="navbar-logo">R</div>
+        <div className="navbar-logo"><div class="loader"></div></div>
         <span>RAGLab</span>
       </Link>
 

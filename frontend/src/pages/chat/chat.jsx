@@ -1,13 +1,13 @@
 import { useState } from "react";
-import "./Chat.css";
+import "./chat.css";
+
 
 import Navbar from "../../components/Navbar/Navbar";
-import Sidebar from "../../components/Chat/Sidebar/Sidebar";
-import Greeting from "../../components/Chat/Greeting/Greeting";
-import ChatInput from "../../components/Chat/ChatInput/ChatInput";
-import Suggestions from "../../components/Chat/Suggestions/Suggestions";
+import Sidebar from "../../components/chat/sidebar/Sidebar";
+import Greeting from "../../components/chat/Greeting/Greeting";
+import ChatInput from "../../components/chat/ChatInput/ChatInput";
+import Suggestions from "../../components/chat/Suggestions/Suggestions";
 import Footer from "../../components/Footer/Footer";
-
 function Chat() {
   const [hasSearched, setHasSearched] = useState(false);
 

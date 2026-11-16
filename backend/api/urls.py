@@ -20,4 +20,5 @@ urlpatterns = [
     RetrievalView.as_view(),
     name="retrieval",
 ),
+    path("rag/", rag_view, name="rag"),
 ]

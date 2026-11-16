@@ -47,8 +47,12 @@ Answer:
             "model": MODEL_NAME,
             "prompt": prompt,
             "stream": False,
+            "options": {
+                "temperature": 0.2,
+                "num_predict": 300,
+            },
         },
-        timeout=120,
+        timeout=600,
     )
 
     response.raise_for_status()

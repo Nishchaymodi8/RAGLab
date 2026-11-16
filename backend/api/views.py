@@ -17,6 +17,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rag.models import Document, DocumentVersion
 from .services.document_processor import process_document_version
 from api.services.retrieval_service import retrieve_chunks
+from rest_framework.decorators import api_view, permission_classes
+from api.services.rag_service import run_rag
 
 
 
@@ -303,6 +305,7 @@ class DocumentListCreateView(APIView):
         )
 
 class RetrievalView(APIView):
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -355,3 +358,34 @@ class RetrievalView(APIView):
             "top_k": top_k,
             "results": response_results,
         })
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def rag_view(request):
+    query = request.data.get("query", "").strip()
+    top_k = request.data.get("top_k", 5)
+
+    if not query:
+        return Response(
+            {"detail": "Query is required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        top_k = int(top_k)
+
+        if top_k <= 0:
+            return Response(
+                {"detail": "top_k must be greater than 0."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        result = run_rag(query, top_k=top_k)
+
+        return Response(result)
+
+    except Exception as error:
+        return Response(
+            {"detail": str(error)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

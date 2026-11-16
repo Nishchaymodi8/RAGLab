@@ -60,28 +60,34 @@
 }
 
 /* Retrieval results scroll independently */
-.chat-input-area.has-results .retrieval-results {
+.chat-input-area.has-results {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-input-area.has-results .chat-messages {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-
   padding-right: 8px;
   padding-bottom: 20px;
 }
 
-.retrieval-results::-webkit-scrollbar {
+.chat-messages::-webkit-scrollbar {
   width: 7px;
 }
 
-.retrieval-results::-webkit-scrollbar-track {
+.chat-messages::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.retrieval-results::-webkit-scrollbar-thumb {
+.chat-messages::-webkit-scrollbar-thumb {
   background: #505050;
   border-radius: 10px;
 }
 
-.retrieval-results::-webkit-scrollbar-thumb:hover {
+.chat-messages::-webkit-scrollbar-thumb:hover {
   background: #666666;
 }
