@@ -44,7 +44,9 @@ function ChatInput({ onSearch }) {
           },
           body: JSON.stringify({
             query,
-            top_k: 3,
+            top_k: 5,
+            strategy: "hybrid",
+            rerank: true,
           }),
         }
       );

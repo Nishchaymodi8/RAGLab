@@ -364,6 +364,8 @@ class RetrievalView(APIView):
 def rag_view(request):
     query = request.data.get("query", "").strip()
     top_k = request.data.get("top_k", 5)
+    strategy = request.data.get("strategy", "semantic")
+    rerank = request.data.get("rerank", False)
 
     if not query:
         return Response(
@@ -380,7 +382,12 @@ def rag_view(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        result = run_rag(query, top_k=top_k)
+        result = run_rag(
+            query,
+            top_k=top_k,
+            strategy=strategy,
+            rerank=rerank,
+        )
 
         return Response(result)
 

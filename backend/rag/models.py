@@ -1,5 +1,5 @@
 from django.db import models
-
+from pgvector.django import VectorField
 
 class Dataset(models.Model):
     name = models.CharField(max_length=200)
@@ -84,7 +84,7 @@ class Chunk(models.Model):
     start_offset = models.PositiveIntegerField(null=True, blank=True)
     end_offset = models.PositiveIntegerField(null=True, blank=True)
     chunking_config = models.JSONField(default=dict)
-    embedding = models.JSONField(null=True, blank=True)
+    embedding = VectorField(dimensions=384, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
 

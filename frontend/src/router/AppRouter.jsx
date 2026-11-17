@@ -5,6 +5,8 @@ import Chat from "../pages/chat/chat";
 import ProtectedRoute from "./ProtectedRoute";
 import Settings from "../pages/Settings/Settings";
 import Documents from "../pages/Documents/Documents";
+import Lab from "../pages/Lab/Lab";
+
 
 function AppRouter() {
   return (
@@ -15,6 +17,7 @@ function AppRouter() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/documents" element={<Documents />} />
+        <Route path="/lab" element={<Lab />} />
       </Route>
     </Routes>
   );

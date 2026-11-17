@@ -1,9 +1,16 @@
-from api.services.retrieval_service import retrieve_chunks
+from api.services.retrieval_pipeline_service import retrieve
+
 from api.services.generation_service import generate_answer
 
 
-def run_rag(query, top_k=5):
-    retrieved_chunks = retrieve_chunks(query, top_k=top_k)
+def run_rag(query,top_k=5,strategy="semantic",rerank=False,):
+    
+    retrieved_chunks = retrieve(
+        query,
+        strategy=strategy,
+        top_k=top_k,
+        rerank=rerank,
+    )
 
     answer = generate_answer(
         query,
