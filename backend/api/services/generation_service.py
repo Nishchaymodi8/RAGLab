@@ -40,23 +40,31 @@ User question:
 
 Answer:
 """
-
+    print("PROMPT LENGTH:", len(prompt))
     response = requests.post(
         OLLAMA_URL,
         json={
             "model": MODEL_NAME,
             "prompt": prompt,
             "stream": False,
+            "think": False,
             "options": {
                 "temperature": 0.2,
                 "num_predict": 300,
             },
         },
+        
         timeout=600,
     )
 
     response.raise_for_status()
 
     data = response.json()
+    print("OLLAMA RESPONSE:", data)
+    print("OLLAMA STATUS:", response.status_code)
+    print("OLLAMA RESPONSE:", repr(data.get("response")))
+    print("OLLAMA THINKING:", repr(data.get("thinking")))
+    print("OLLAMA DONE REASON:", data.get("done_reason"))
+
 
     return data["response"].strip()

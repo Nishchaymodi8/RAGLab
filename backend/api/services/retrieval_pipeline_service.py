@@ -1,7 +1,7 @@
 from api.services.retrieval_service import retrieve_chunks
 from api.services.lexical_retrieval_service import retrieve_chunks_lexical
 from api.services.hybrid_retrieval_service import retrieve_chunks_hybrid
-from api.services.reranker_service import rerank_chunks
+from api.services.reranking_service import rerank_chunks
 
 
 def retrieve(
