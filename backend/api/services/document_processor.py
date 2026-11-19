@@ -1,5 +1,7 @@
 from rag.models import DocumentVersion, Chunk
 from api.services.embedding_service import generate_embedding
+from django.db import transaction
+
 
 
 DEFAULT_CHUNK_SIZE = 500
@@ -52,40 +54,42 @@ def process_document_version(document_version, file_content):
     document_version.save(update_fields=["processing_status"])
 
     try:
-        extracted_text = extract_text(file_content)
+        with transaction.atomic():
+            extracted_text = extract_text(file_content)
 
-        document_version.extracted_text = extracted_text
-        document_version.save(update_fields=["extracted_text"])
+            document_version.extracted_text = extracted_text
+            document_version.save(update_fields=["extracted_text"])
 
-        chunks = create_chunks(extracted_text)
+            chunks = create_chunks(extracted_text)
 
-        chunk_objects = []
+            chunk_objects = []
 
-        for chunk in chunks:
-            embedding = generate_embedding(chunk["text"])
+            for chunk in chunks:
+                embedding = generate_embedding(chunk["text"])
 
-            chunk_objects.append(
-                Chunk(
-                    document_version=document_version,
-                    text=chunk["text"],
-                    chunk_index=chunk["chunk_index"],
-                    start_offset=chunk["start_offset"],
-                    end_offset=chunk["end_offset"],
-                    chunking_config={
-                        "strategy": "fixed_character",
-                        "chunk_size": DEFAULT_CHUNK_SIZE,
-                        "chunk_overlap": DEFAULT_CHUNK_OVERLAP,
-                    },
-                    embedding=embedding,
+                chunk_objects.append(
+                    Chunk(
+                        document_version=document_version,
+                        text=chunk["text"],
+                        chunk_index=chunk["chunk_index"],
+                        start_offset=chunk["start_offset"],
+                        end_offset=chunk["end_offset"],
+                        chunking_config={
+                            "strategy": "fixed_character",
+                            "chunk_size": DEFAULT_CHUNK_SIZE,
+                            "chunk_overlap": DEFAULT_CHUNK_OVERLAP,
+                        },
+                        embedding=embedding,
+                    )
                 )
-            )
 
-        Chunk.objects.bulk_create(chunk_objects)
+            Chunk.objects.bulk_create(chunk_objects)
 
-        document_version.processing_status = "ready"
-        document_version.save(update_fields=["processing_status"])
+            document_version.processing_status = "ready"
+            document_version.save(update_fields=["processing_status"])
 
     except Exception:
         document_version.processing_status = "failed"
         document_version.save(update_fields=["processing_status"])
         raise
+

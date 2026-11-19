@@ -57,6 +57,7 @@ function Documents() {
     fetchDocuments();
   }, []);
 
+  
   const handleUpload = async (event) => {
     const file = event.target.files[0];
 
@@ -92,7 +93,15 @@ function Documents() {
         );
       }
 
+      // Duplicate document
+      if (response.status === 200 && data.detail) {
+        setError(data.detail);
+        return;
+      }
+
+      // New document
       setDocuments((previous) => [data, ...previous]);
+
     } catch (err) {
       setError(err.message);
     } finally {

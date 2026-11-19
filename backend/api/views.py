@@ -155,7 +155,7 @@ class DocumentListCreateView(APIView):
 
         return Response(serializer.data)
 
-    @transaction.atomic
+
     def post(self, request):
         uploaded_file = request.FILES.get("file")
 
@@ -195,14 +195,43 @@ class DocumentListCreateView(APIView):
         file_content = uploaded_file.read()
 
         content_hash = hashlib.sha256(file_content).hexdigest()
-
         source_type = allowed_types[extension]
 
-        document = Document.objects.create(
-            source_name=filename,
-            source_type=source_type,
+        # Check whether this document already exists
+        document = (
+            Document.objects
+            .filter(source_name=filename)
+            .first()
         )
 
+        if document:
+            # Check whether this exact content already exists
+            existing_version = (
+                document.versions
+                .filter(content_hash=content_hash)
+                .first()
+            )
+
+            if existing_version:
+                serializer = DocumentSerializer(document)
+
+                return Response(
+                    {
+                        "detail": "Document already exists.",
+                        "document": serializer.data,
+                        "version_id": existing_version.id,
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+        # Create a new document if this filename has never been uploaded
+        if not document:
+            document = Document.objects.create(
+                source_name=filename,
+                source_type=source_type,
+            )
+
+        # New content for an existing document = new version
         document_version = DocumentVersion.objects.create(
             document=document,
             content_hash=content_hash,
@@ -217,9 +246,7 @@ class DocumentListCreateView(APIView):
 
         except UnicodeDecodeError:
             document_version.processing_status = "failed"
-            document_version.save(
-                update_fields=["processing_status"]
-            )
+            document_version.save(update_fields=["processing_status"])
 
             return Response(
                 {
@@ -232,70 +259,13 @@ class DocumentListCreateView(APIView):
             )
 
         except Exception:
+            document_version.processing_status = "failed"
+            document_version.save(update_fields=["processing_status"])
+
             return Response(
-                {
-                    "detail": "Document processing failed."
-                },
+                {"detail": "Document processing failed."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
-        serializer = DocumentSerializer(document)
-
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED,
-        )
-        uploaded_file = request.FILES.get("file")
-
-        if not uploaded_file:
-            return Response(
-                {"detail": "No file was uploaded."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        filename = uploaded_file.name
-
-        if "." not in filename:
-            return Response(
-                {"detail": "File must have an extension."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        extension = filename.rsplit(".", 1)[-1].lower()
-
-        allowed_types = {
-            "txt": "txt",
-            "md": "md",
-            "markdown": "md",
-        }
-
-        if extension not in allowed_types:
-            return Response(
-                {
-                    "detail": (
-                        "Unsupported file type. "
-                        "Only TXT and Markdown files are supported."
-                    )
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        file_content = uploaded_file.read()
-
-        content_hash = hashlib.sha256(file_content).hexdigest()
-
-        source_type = allowed_types[extension]
-
-        document = Document.objects.create(
-            source_name=filename,
-            source_type=source_type,
-        )
-
-        DocumentVersion.objects.create(
-            document=document,
-            content_hash=content_hash,
-            processing_status="pending",
-        )
 
         serializer = DocumentSerializer(document)
 

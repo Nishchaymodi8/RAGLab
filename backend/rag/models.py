@@ -1,5 +1,5 @@
 from django.db import models
-from pgvector.django import VectorField
+from pgvector.django import VectorField,HnswIndex
 
 class Dataset(models.Model):
     name = models.CharField(max_length=200)
@@ -96,7 +96,13 @@ class Chunk(models.Model):
             )
         ]
         indexes = [
-            models.Index(fields=["document_version", "chunk_index"]),
+            HnswIndex(
+                name="chunk_embedding_hnsw_idx",
+                fields=["embedding"],
+                m=16,
+                ef_construction=64,
+                opclasses=["vector_cosine_ops"],
+            ),
         ]
 
     def __str__(self):
