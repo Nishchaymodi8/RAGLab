@@ -24,3 +24,18 @@ def generate_embedding(text):
     )
 
     return embedding.tolist()
+
+def generate_embeddings(texts):
+    if not texts:
+        return []
+
+    model = get_embedding_model()
+
+    embeddings = model.encode(
+        texts,
+        normalize_embeddings=True,
+        batch_size=32,
+        show_progress_bar=False,
+    )
+
+    return embeddings.tolist()

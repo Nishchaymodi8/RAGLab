@@ -21,4 +21,21 @@ urlpatterns = [
     name="retrieval",
 ),
     path("rag/", rag_view, name="rag"),
+
+    path(
+    "documents/<int:pk>/",
+    DocumentDetailView.as_view(),
+    name="document-detail",
+),
+    path(
+    "datasets/",
+    DatasetListCreateView.as_view(),
+    name="datasets",
+),
+    path(
+    "evaluation-cases/",
+    EvaluationCaseListCreateView.as_view(),
+    name="evaluation-cases",
+),
+
 ]

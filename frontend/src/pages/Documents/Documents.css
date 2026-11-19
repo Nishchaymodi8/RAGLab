@@ -106,7 +106,8 @@
     1fr
     0.7fr
     0.7fr
-    1fr;
+    1fr
+    0.5fr;
 
   align-items: center;
   gap: 20px;
@@ -271,6 +272,34 @@
 
 .spin {
   animation: documentsSpin 1s linear infinite;
+}
+.document-action {
+  display: flex;
+  align-items: center;
+}
+
+.document-delete-button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #393939;
+  border-radius: 8px;
+  background: transparent;
+  color: #929292;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.document-delete-button:hover {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.08);
+}
+
+.document-delete-button:active {
+  transform: scale(0.95);
 }
 
 @keyframes documentsSpin {

@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import RegisterSerializer, LoginSerializer, DocumentSerializer
+from .serializers import RegisterSerializer, LoginSerializer, DocumentSerializer ,DatasetSerializer , EvaluationCaseSerializer
 from rest_framework.permissions import IsAuthenticated,AllowAny
 import os
 from django.contrib.auth.models import User
@@ -14,12 +14,14 @@ from google.oauth2 import id_token
 from rest_framework_simplejwt.tokens import RefreshToken
 import hashlib
 from rest_framework.parsers import MultiPartParser, FormParser
-from rag.models import Document, DocumentVersion
-from .services.document_processor import process_document_version
+from rag.models import Dataset, Document, DocumentVersion
+from .services.ingestion_service import start_document_ingestion
 from api.services.retrieval_service import retrieve_chunks
 from rest_framework.decorators import api_view, permission_classes
 from api.services.rag_service import run_rag
-
+from rest_framework.exceptions import NotFound
+from django.shortcuts import render, get_object_or_404
+from rag.models import Dataset, EvaluationCase
 
 
 
@@ -238,40 +240,16 @@ class DocumentListCreateView(APIView):
             processing_status="pending",
         )
 
-        try:
-            process_document_version(
-                document_version,
-                file_content,
-            )
-
-        except UnicodeDecodeError:
-            document_version.processing_status = "failed"
-            document_version.save(update_fields=["processing_status"])
-
-            return Response(
-                {
-                    "detail": (
-                        "Could not decode the document. "
-                        "Please use a UTF-8 encoded TXT or Markdown file."
-                    )
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        except Exception:
-            document_version.processing_status = "failed"
-            document_version.save(update_fields=["processing_status"])
-
-            return Response(
-                {"detail": "Document processing failed."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+        start_document_ingestion(
+            document_version,
+            file_content,
+        )
 
         serializer = DocumentSerializer(document)
 
         return Response(
             serializer.data,
-            status=status.HTTP_201_CREATED,
+            status=status.HTTP_202_ACCEPTED,
         )
 
 class RetrievalView(APIView):
@@ -365,4 +343,80 @@ def rag_view(request):
         return Response(
             {"detail": str(error)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+class DocumentDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        document = get_object_or_404(Document, pk=pk)
+
+        document.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class DatasetListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        datasets = Dataset.objects.order_by("-created_at")
+
+        serializer = DatasetSerializer(
+            datasets,
+            many=True,
+        )
+
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = DatasetSerializer(data=request.data)
+
+        if serializer.is_valid():
+            dataset = serializer.save()
+
+            return Response(
+                DatasetSerializer(dataset).data,
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class EvaluationCaseListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        dataset_id = request.query_params.get("dataset")
+
+        cases = EvaluationCase.objects.order_by("id")
+
+        if dataset_id:
+            cases = cases.filter(dataset_id=dataset_id)
+
+        serializer = EvaluationCaseSerializer(
+            cases,
+            many=True,
+        )
+
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = EvaluationCaseSerializer(
+            data=request.data
+        )
+
+        if serializer.is_valid():
+            evaluation_case = serializer.save()
+
+            return Response(
+                EvaluationCaseSerializer(evaluation_case).data,
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
         )

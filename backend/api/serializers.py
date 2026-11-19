@@ -6,6 +6,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from rag.models import Document, DocumentVersion
 
+from rag.models import Dataset, EvaluationCase
+
 
 
 
@@ -144,3 +146,32 @@ class DocumentSerializer(serializers.ModelSerializer):
             return 0
 
         return latest_version.chunks.count()
+
+
+class DatasetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dataset
+        fields = [
+            "id",
+            "name",
+            "description",
+            "version",
+            "content_hash",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class EvaluationCaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EvaluationCase
+        fields = [
+            "id",
+            "dataset",
+            "question",
+            "expected_answer",
+            "category",
+            "difficulty",
+            "answer_expected",
+            "created_at",
+        ]

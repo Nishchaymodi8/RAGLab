@@ -7,6 +7,8 @@ import {
   Clock,
   AlertCircle,
   LoaderCircle,
+  Trash2,
+
 } from "lucide-react";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -56,6 +58,24 @@ function Documents() {
   useEffect(() => {
     fetchDocuments();
   }, []);
+
+  useEffect(() => {
+    const hasProcessingDocument = documents.some(
+      (document) =>
+        document.status === "pending" ||
+        document.status === "processing"
+    );
+
+    if (!hasProcessingDocument) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      fetchDocuments();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [documents]);
 
   
   const handleUpload = async (event) => {
@@ -110,10 +130,56 @@ function Documents() {
     }
   };
 
+  const handleDelete = async (documentId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to remove this document?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setError("");
+
+    const token = localStorage.getItem("access_token");
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/documents/${documentId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        let data = {};
+
+        try {
+          data = await response.json();
+        } catch {
+          // DELETE may return an empty response
+        }
+
+        throw new Error(
+          data.detail || "Failed to remove document."
+        );
+      }
+
+      setDocuments((previous) =>
+        previous.filter((document) => document.id !== documentId)
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const getStatusIcon = (status) => {
     if (status === "ready") {
       return <CheckCircle size={16} />;
-    }
+    } 
 
     if (status === "failed") {
       return <AlertCircle size={16} />;
@@ -199,6 +265,7 @@ function Documents() {
             <span>Chunks</span>
             <span>Version</span>
             <span>Added</span>
+            <span>Action</span>
           </div>
 
           {loading ? (
@@ -261,6 +328,15 @@ function Documents() {
                     document.created_at
                   ).toLocaleDateString()}
                 </div>
+                <div className="document-action">
+                <button
+                  className="document-delete-button"
+                  onClick={() => handleDelete(document.id)}
+                  title="Remove document"
+                >
+                  <Trash2 size={17} />
+                </button>
+              </div>
               </div>
             ))
           )}
