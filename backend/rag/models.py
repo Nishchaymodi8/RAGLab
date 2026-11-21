@@ -211,6 +211,7 @@ class QueryResult(models.Model):
         related_name="query_results",
     )
     retrieval_latency_ms = models.FloatField(null=True, blank=True)
+    generated_answer = models.TextField(blank=True)
     retrieved_count = models.PositiveIntegerField(default=0)
     error = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -278,3 +279,46 @@ class MetricResult(models.Model):
 
     def __str__(self):
         return f"{self.metric_name}@{self.k}: {self.value}"
+
+class FailureDiagnosis(models.Model):
+    FAILURE_TYPE_CHOICES = [
+        ("retrieval_failure", "Retrieval Failure"),
+        ("generation_failure", "Generation Failure"),
+        ("evaluation_incomplete", "Evaluation Incomplete"),
+        ("no_major_failure", "No Major Failure"),
+    ]
+
+    SEVERITY_CHOICES = [
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ("none", "None"),
+    ]
+
+    query_result = models.OneToOneField(
+        QueryResult,
+        on_delete=models.CASCADE,
+        related_name="failure_diagnosis",
+    )
+
+    failure_type = models.CharField(
+        max_length=50,
+        choices=FAILURE_TYPE_CHOICES,
+    )
+
+    severity = models.CharField(
+        max_length=20,
+        choices=SEVERITY_CHOICES,
+    )
+
+    reason = models.TextField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return (
+            f"Diagnosis for QueryResult {self.query_result_id}: "
+            f"{self.failure_type}"
+        )
