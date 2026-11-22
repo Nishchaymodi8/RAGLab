@@ -1,0 +1,32 @@
+Phase 1: Finish retrieval engine
+Phase 2: Finish the RAG pipeline
+Phase 3: Make storage production-worthy
+Phase 4: Evaluation
+
+3.1 Fix migration state
+3.2 Add pgvector index
+3.3 Improve database indexes
+3.4 Make document ingestion robust
+3.5 Separate ingestion from request handling
+3.6 Storage architecture cleanup
+
+PHASE 4
+Evaluation Engine
+    ↓
+4.1 Dataset management
+        ↓
+4.2 Evaluation runner
+        ↓
+4.3 Retrieval metrics
+        ↓
+4.4 Answer-quality metrics
+        ↓
+4.5 Failure diagnosis
+        ↓
+4.6 Experiment comparison
+        ↓
+4.7 Evaluation API
+        ↓
+4.8 Lab UI
+        ↓
+4.9 AI Insights
